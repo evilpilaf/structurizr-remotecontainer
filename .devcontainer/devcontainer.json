@@ -1,0 +1,12 @@
+{
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "extensions": [
+        "systemticks.c4-dsl-extension",
+        "editorconfig.editorconfig"
+    ],
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    }
+}
