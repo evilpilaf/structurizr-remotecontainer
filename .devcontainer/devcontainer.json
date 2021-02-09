@@ -1,12 +1,12 @@
 {
-    "build": {
-        "dockerfile": "Dockerfile"
-    },
-    "extensions": [
-        "systemticks.c4-dsl-extension",
-        "editorconfig.editorconfig"
-    ],
-    "settings": {
-        "terminal.integrated.shell.linux": "/bin/bash"
-    }
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "extensions": [
+    "ciarant.vscode-structurizr",
+    "editorconfig.editorconfig"
+  ],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  }
 }
