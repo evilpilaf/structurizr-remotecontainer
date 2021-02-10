@@ -4,7 +4,8 @@
   },
   "extensions": [
     "ciarant.vscode-structurizr",
-    "editorconfig.editorconfig"
+    "editorconfig.editorconfig",
+    "streetsidesoftware.code-spell-checker"
   ],
   "settings": {
     "terminal.integrated.shell.linux": "/bin/bash"
