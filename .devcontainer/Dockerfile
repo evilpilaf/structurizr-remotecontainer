@@ -1,19 +1,23 @@
+# You can pick any Debian/Ubuntu-based image. 😊
+FROM mcr.microsoft.com/vscode/devcontainers/base:0-buster
+
+# [Option] Install zsh
+ARG INSTALL_ZSH="true"
+# [Option] Upgrade OS packages to their latest versions
+ARG UPGRADE_PACKAGES="false"
+
+# Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
 ARG STRUCTURIZR_VERSION=1.8.0
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+COPY library-scripts/*.sh /tmp/library-scripts/
+RUN bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" \
+    # Install the Azure CLI
+    && bash /tmp/library-scripts/install-structurizr.sh "${STRUCTURIZR_VERSION}" "${USERNAME}" \
+    # Clean up
+    && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
 
-FROM alpine:3.13 as base
-ARG STRUCTURIZR_VERSION
-ENV STRUCTURIZR_VERSION=${STRUCTURIZR_VERSION}
-
-RUN apk update \
-    && apk upgrade \
-    && apk add unzip curl bash openjdk11-jre
-
-WORKDIR /download
-
-RUN curl -L -o structurizr-cli.zip https://github.com/structurizr/cli/releases/download/v$STRUCTURIZR_VERSION/structurizr-cli-$STRUCTURIZR_VERSION.zip \
-    && mkdir -p /cli/structurizr \
-    && unzip structurizr-cli.zip -d /cli/structurizr
-
-WORKDIR /workdir
-RUN rm -R /download
-ENV PATH=/cli/structurizr:$PATH
+# [Optional] Uncomment this section to install additional OS packages.
+# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
+#     && apt-get -y install --no-install-recommends <your-package-list-here>
