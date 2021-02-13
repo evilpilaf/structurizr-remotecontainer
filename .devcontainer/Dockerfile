@@ -1,10 +1,9 @@
-# You can pick any Debian/Ubuntu-based image. 😊
-FROM mcr.microsoft.com/vscode/devcontainers/base:0-buster
+# [Choice] Alpine version: 3.12, 3.11, 3.10
+ARG VARIANT=3.12
+FROM alpine:${VARIANT}
 
 # [Option] Install zsh
 ARG INSTALL_ZSH="true"
-# [Option] Upgrade OS packages to their latest versions
-ARG UPGRADE_PACKAGES="false"
 
 # Install needed packages and setup non-root user. Use a separate RUN statement to add your own dependencies.
 ARG STRUCTURIZR_VERSION=1.8.0
@@ -12,11 +11,10 @@ ARG USERNAME=vscode
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 COPY library-scripts/*.sh /tmp/library-scripts/
-RUN bash /tmp/library-scripts/common-debian.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" "${UPGRADE_PACKAGES}" \
-    # Install the Azure CLI
-    && bash /tmp/library-scripts/install-structurizr.sh "${STRUCTURIZR_VERSION}" "${USERNAME}" \
-    # Clean up
-    && apt-get clean -y && rm -rf /var/lib/apt/lists/* /tmp/library-scripts
+RUN apk update \
+    && ash /tmp/library-scripts/common-alpine.sh "${INSTALL_ZSH}" "${USERNAME}" "${USER_UID}" "${USER_GID}" \
+    && ash /tmp/library-scripts/install-structurizr.sh "${STRUCTURIZR_VERSION}" "${USERNAME}" \
+    && rm -rf /tmp/library-scripts
 
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
